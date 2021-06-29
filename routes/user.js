@@ -1,36 +1,46 @@
 var express = require('express');
 var router = express.Router();
-
+var productHelper = require('../helpers/product-helpers')
+var userHelper = require('../helpers/user-helper')
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  let products = [
-    {
-      name:"Skyfall",
-      category:"Action",
-      description:"License to kill",
-      image:"https://flxt.tmsimg.com/assets/p8919177_p_v13_bg.jpg"
-    },
-    {
-      name:"Leon",
-      category:"Crime",
-      description:"Choose prof",
-      image:"https://m.media-amazon.com/images/M/MV5BODllNWE0MmEtYjUwZi00ZjY3LThmNmQtZjZlMjI2YTZjYmQ0XkEyXkFqcGdeQXVyNTc1NTQxODI@._V1_.jpg"
-    },
-    {
-      name:"Up",
-      category:"Animation",
-      description:"Fly",
-      image:"https://themify.me/demo/themes/post-type-builder/files/2015/05/up.jpg"
-    },
-    {
-      name:"Big B",
-      category:"Mass",
-      description:"Bilal",
-      image:"https://static.toiimg.com/photo/msid-61688826/61688826.jpg?95002"
-    }
-  ]
+  let user = req.session.user
+  productHelper.getAllProducts().then((products)=>{
+    res.render('user/view-products', { admin: false, products,user})
+    })
 
-  res.render('index', {products,admin:false});
+  
 });
+
+router.get('/login',(req,res)=>{
+  res.render('user/login')
+
+})
+router.get('/signup',(req,res)=>{
+  res.render('user/signup')
+})
+router.post('/signup',(req,res)=>{
+  userHelper.doSignup(req.body).then((response)=>{
+    console.log(response)
+  })
+})
+
+router.post('/login',(req,res)=>{
+  userHelper.doLogin(req.body).then((response)=>{
+    if(response.status){
+      req.session.loggedIn=true
+      req.session.user=response.user
+      res.redirect('/')
+    }else{
+      res.redirect('/login')
+    }
+  })
+
+})
+
+router.get('/logout',(req,res)=>{
+  req.session.destroy()
+  res.redirect('/login')
+})
 
 module.exports = router;
