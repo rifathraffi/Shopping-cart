@@ -1,0 +1,30 @@
+{{#if products}}
+<section>
+    <div class="container">
+        <table class="table">
+            <thead>
+                <tr>
+                <td>Item</td>
+                <td>Title</td>
+                <td>Quantity</td>
+                <td></td>
+                </tr>    
+            </thead>
+            <tbody>
+                {{#each products}}
+                <tr>
+                <td><img style="width: 70px;height:70px" src="/product-images/{{this._id}}.png"></td>
+                <td>{{this.name}}</td>
+                <td><button class="cart-item-count btn btn-outline-primary mr-4">-</button> 1 <button class="cart-item-count btn btn-outline-primary ml-3">+</button></td>
+                <td><button class="btn btn-danger"><a href=""  style="text-decoration: none;color:white">Remove</a></button></td>
+                </tr>
+                {{/each}}
+            </tbody>
+           
+
+        </table>
+    </div>
+</section>
+{{else}}
+<h1>Cart is Empty</h1>
+{{/if}}
