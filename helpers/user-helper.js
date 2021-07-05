@@ -182,7 +182,11 @@ module.exports = {
                 }
             ]).toArray()
             //console.log(total)
-            resolve(total[0].total)
+            try{   
+            resolve(total[0].total)}
+            catch(e){
+                resolve(null)
+            }    
         })
     },
     removeCartProduct:(details)=>{
