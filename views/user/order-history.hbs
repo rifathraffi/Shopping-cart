@@ -1,0 +1,33 @@
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h1 class="mt-5">Order History</h1>
+            </div>
+        </div>
+        <div class="row mt-5">
+            <table class="table">
+                <thead>
+                    <th>Date</th>
+                    <th>Address</th>
+                    <th>Total Amount</th>
+                    <th>Payment</th>
+                    <th></th>
+                </thead>
+                <tbody>
+                    {{#each orderDetails}}
+                <tr>
+                    <td>{{this.date}}</td>
+                    <td>{{this.deliveryDetails.address}}</td>
+                    <td>{{this.totalAmount}}</td>
+                    <td>{{this.paymentMethod}}</td>
+                    <td><a href="/view-order-products/{{this._id}}" class="btn btn-primary">View Products</a></td>
+                </tr>
+                {{/each}}
+                </tbody>
+                
+
+            </table>
+        </div>
+    </div>
+</section>
