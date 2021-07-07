@@ -15,7 +15,7 @@
                 {{#each products}}
                 <tr>
                     
-                <td><img style="width: 70px;height:70px" src="/product-images/{{this.product._id}}.png"></td>
+                <td><img style="width: 70px;height:70px" src="/product-images/{{this.product._id}}.jpg"></td>
                 <td>{{this.product.name}}</td>
                 <td>₹ {{this.product.price}}</td>
                 <td><button class="cart-item-count btn btn-outline-primary me-2" onclick="changeQuantity('{{this._id}}','{{this.product._id}}','{{../user}}',-1)">-</button><span id="{{this.product._id}}">{{this.quantity}}</span><button class="cart-item-count btn btn-outline-primary ms-2" onclick="changeQuantity('{{this._id}}','{{this.product._id}}','{{../user}}',1)">+</button></td>
@@ -36,7 +36,15 @@
     
 </section>
 {{else}}
-<h1>Empty</h1>
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 text-center mt-5">
+                <h1>Cart is Empty</h1>
+            </div>
+        </div>
+    </div>
+</section>
 {{/if}}
 
 

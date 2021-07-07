@@ -12,6 +12,7 @@
                     <th>Address</th>
                     <th>Total Amount</th>
                     <th>Payment</th>
+                    <th>Status</th>
                     <th></th>
                 </thead>
                 <tbody>
@@ -21,6 +22,7 @@
                     <td>{{this.deliveryDetails.address}}</td>
                     <td>{{this.totalAmount}}</td>
                     <td>{{this.paymentMethod}}</td>
+                    <td>{{this.status}}</td>
                     <td><a href="/view-order-products/{{this._id}}" class="btn btn-primary">View Products</a></td>
                 </tr>
                 {{/each}}

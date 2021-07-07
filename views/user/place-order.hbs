@@ -1,10 +1,10 @@
 <section>
     <div class="container">
         <form action="" id="checkout-form" class="mt-4">
-        <div class="row mt-5">
-            <div class="col-md-6">
-                <h2 class="mt-5">Enter Delivery Details</h2>
-                
+            <div class="row mt-5">
+                <div class="col-md-6">
+                    <h2 class="mt-5">Enter Delivery Details</h2>
+
                     <div class="form-group mt-2">
                         <label for="formGroupExampleInput">Address</label>
                         <input type="text" class="form-control" id="address" name="address" placeholder="Address">
@@ -17,53 +17,105 @@
                         <label for="formGroupExampleInput2">Mobile</label>
                         <input type="text" class="form-control" id="mobile" name="mobile" placeholder="Mobile">
                     </div>
-                    <input type="text" name="userId" id="" value="{{user._id}}" hidden> 
-                
-            </div>
-            
-            <div class="col-md-6">    
-                <div class="ms-5 mt-5 p-3 pb-4"  style="border: 1px solid black;">
-                    
-                    <h4>Total Amount: ₹{{total}}</h4>
-                    <hr>
-                    <h5>Payment method</h5>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="payment-method" id="cod-option" value="COD"
-                            checked>
-                        <label class="form-check-label" for="cod-option">
-                            COD
-                        </label>
+                    <input type="text" name="userId" id="" value="{{user._id}}" hidden>
+
+                </div>
+
+                <div class="col-md-6">
+                    <div class="ms-5 mt-5 p-3 pb-4" style="border: 1px solid black;">
+
+                        <h4>Total Amount: ₹{{total}}</h4>
+                        <hr>
+                        <h5>Payment method</h5>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="payment-method" id="cod-option"
+                                value="COD" checked>
+                            <label class="form-check-label" for="cod-option">
+                                COD
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="payment-method" id="online-option"
+                                value="ONLINE">
+                            <label class="form-check-label" for="online-option">
+                                Online
+                            </label>
+                            <button class="btn btn-success float-end mb-2" type="submit">Checkout</a>
+                        </div>
+
+
                     </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="payment-method" id="online-option" value="ONLINE">
-                        <label class="form-check-label" for="online-option">
-                            Online
-                        </label>
-                        <button class="btn btn-success float-end mb-2" type="submit">Checkout</a>
-                    </div>
-                    
-                
+
                 </div>
 
             </div>
-            
-        </div></form>
+        </form>
     </div>
 </section>
-
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
-    $("#checkout-form").submit((e)=>{
+    $("#checkout-form").submit((e) => {
         e.preventDefault()
         $.ajax({
-            url:'/place-order',
-            method:'post',
-            data:$('#checkout-form').serialize(),
-            success:(response)=>{
-                alert(response)
-                if(response.status){
-                    location.href='/order-success'
+            url: '/place-order',
+            method: 'post',
+            data: $('#checkout-form').serialize(),
+            success: (response) => {
+                {{!-- alert(response) --}}
+                if (response.codSuccess) {
+                    location.href = '/order-success'
+                } else {
+                    razorPayment(response)
                 }
             }
         })
     })
+    function razorPayment(order) {
+        var options = {
+            "key": "rzp_test_Skxdb6Vaqa747G", // Enter the Key ID generated from the Dashboard
+            "amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+            "currency": "INR",
+            "name": "RR Applications",
+            "description": "Test Transaction",
+            "image": "https://example.com/your_logo",
+            "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+            "handler": function (response) {
+                
+
+                verifyPayment(response, order)
+            },
+            "prefill": {
+                "name": "Gaurav Kumar",
+                "email": "gaurav.kumar@example.com",
+                "contact": "9999999999"
+            },
+            "notes": {
+                "address": "Razorpay Corporate Office"
+            },
+            "theme": {
+                "color": "#3399cc"
+            }
+        };
+        var rzp1 = new Razorpay(options);
+        rzp1.open();
+        
+    }
+    function verifyPayment(payment,order){
+        $.ajax({
+            url:'/verify-payment',
+            data:{
+                payment,
+                order
+            },
+            method:'post',
+            success:(response)=>{
+                console.log("++++xxxx")
+                if(response.status){
+                location.href="/order-success"}
+                else{
+                    alert("Payment failed!")
+                }
+            }
+        })
+    }
 </script>
